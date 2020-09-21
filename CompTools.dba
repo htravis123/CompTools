@@ -1,0 +1,74 @@
+set window on
+set window title "CompTools 1.0"
+ink rgb(0,0,0),1
+cls rgb(255, 233, 207)
+print "CompTools 1.0"
+wait 1500
+print "(C)Copyright 2020 Wiggler Systems, Inc."
+wait 500
+print "Press any key to continue..."
+wait key
+goto regcheck
+
+regcheck:
+if file exist("reg.dat") = 1
+   open to read 1, "reg.dat"
+   read string 1, fname$
+   read string 1, lname$
+   close file 1
+   goto main
+else
+   goto regmain
+endif
+
+regmain:
+cls
+set window title "CompTools - First-Time Registration"
+Print "Since this is the first time you have used CompTools,"
+print "you must enter some info to make it your copy."
+input "Please enter your first name: ";fname$
+input "Now, your last name: ";lname$
+open to write 1, "reg.dat"
+write string 1,fname$ + chr$(13) + chr$(10) + lname$
+close file 1
+open to write 1, "License.txt"
+write string 1, "This copy of CompTools is registered to:"
+write string 1, fname$ + " " + lname$
+close file 1
+goto regcheck
+
+main:
+cls
+set window title "CompTools - Main"
+print "CompTools Main Menu"
+print "Select an option:"
+print "1. About"
+print "2. Regenerate License File"
+print "3. Exit"
+do
+if keystate(2)=1 then goto about
+if keystate(3)=1 then goto regen_license
+if keystate(4)=1 then end
+loop
+
+about:
+cls
+print "CompTools 1.0 Beta"
+print "Registered to: " + fname$ + " " + lname$
+print "Press any key to return to the main menu"
+wait key
+goto main
+
+regen_license:
+cls
+print "Making License file..."
+wait 2500
+open to write 1, "License.txt"
+write string 1, "This copy of CompTools is registered to:"
+write string 1, fname$ + " " + lname$
+close file 1
+wait 2500
+print "Done!"
+print "Press any key to return to the main menu"
+wait key
+goto main
